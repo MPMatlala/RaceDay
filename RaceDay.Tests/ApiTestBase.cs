@@ -5,7 +5,7 @@ using System.Text.Json;
 namespace RaceDay.Tests
 {
     // shared helper methods for all the test classes
-    public class ApiTestBase : IClassFixture<RaceDayFactory>
+    public class ApiTestBase :  IClassFixture<RaceDayFactory>
     {
         protected readonly RaceDayFactory Factory;
 
