@@ -1,0 +1,10 @@
+@{
+    ViewData["Title"] = "Access denied";
+    string role = Context.Session.GetRole();
+}
+<div class="empty-state">
+    <i class="bi bi-slash-circle-fill"></i>
+    <h1>That page is not for your role</h1>
+    <p>You are logged in as @(role == "Organiser" ? "an Organiser" : "a Participant"), and this page belongs to the other side of RaceDay.</p>
+    <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Take me to my home page</a>
+</div>

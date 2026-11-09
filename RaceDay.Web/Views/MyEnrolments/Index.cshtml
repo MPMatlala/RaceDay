@@ -1,0 +1,62 @@
+@model List<EnrolmentDto>
+@{
+    ViewData["Title"] = "My enrolments";
+}
+
+<div class="page-head">
+    <div>
+        <h1>My enrolments</h1>
+        <p class="page-sub">Every event you have entered, and where each enrolment stands.</p>
+    </div>
+    <a class="btn btn-primary" asp-controller="Events" asp-action="Index">Find events</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <i class="bi bi-ticket-perforated"></i>
+        <h2>You have not enrolled yet</h2>
+        <p>Browse the upcoming events and claim your race number.</p>
+        <a class="btn btn-primary" asp-controller="Events" asp-action="Index">Browse events</a>
+    </div>
+}
+else
+{
+    <div class="rd-card">
+        <div class="table-responsive">
+            <table class="table rd-table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Event</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Race no.</th>
+                        <th scope="col">Event date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col"><span class="visually-hidden">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var e in Model)
+                    {
+                        bool upcoming = e.EventDate.Date >= DateTime.Today;
+                        <tr class="@(e.Status == "Cancelled" ? "row-muted" : "")">
+                            <td><a asp-controller="Events" asp-action="Details" asp-route-id="@e.EventId"><strong>@e.EventName</strong></a></td>
+                            <td>@e.CategoryName</td>
+                            <td><span class="race-number">@e.RaceNumber</span></td>
+                            <td>@Fmt.ShortDate(e.EventDate) @if (!upcoming) { <span class="tag tag-past">Finished</span> }</td>
+                            <td><partial name="_StatusBadge" model="e.Status" /></td>
+                            <td class="text-end">
+                                @if (e.Status != "Cancelled" && upcoming)
+                                {
+                                    <form asp-action="Cancel" asp-route-id="@e.EnrolmentId" method="post" class="d-inline" data-confirm="Cancel your enrolment for &quot;@e.EventName&quot; (@e.CategoryName)?">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

@@ -1,0 +1,6 @@
+@* the date shown like a race bib. Model: the date *@
+@model DateTime
+<div class="date-bib" aria-label="@Fmt.Date(Model)">
+    <span class="date-bib-day">@Model.Day</span>
+    <span class="date-bib-month">@Model.ToString("MMM")</span>
+</div>

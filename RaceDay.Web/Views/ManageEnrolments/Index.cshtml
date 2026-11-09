@@ -1,0 +1,76 @@
+@model EnrolmentsPageViewModel
+@{
+    ViewData["Title"] = "Enrolments";
+    var ev = Model.Event;
+}
+
+<div class="page-head">
+    <div>
+        <h1>Enrolments</h1>
+        <p class="page-sub">@ev.EventName &middot; @Fmt.Date(ev.EventDate)</p>
+    </div>
+    <a class="btn btn-outline-primary" asp-controller="ManageEnrolments" asp-action="Index">Choose another event</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-4">
+        <div class="stat-tile stat-tile-sm"><span class="stat-number text-confirmed">@Model.ConfirmedCount</span><span class="stat-label">Confirmed</span></div>
+    </div>
+    <div class="col-4">
+        <div class="stat-tile stat-tile-sm"><span class="stat-number text-pending">@Model.PendingCount</span><span class="stat-label">Pending</span></div>
+    </div>
+    <div class="col-4">
+        <div class="stat-tile stat-tile-sm"><span class="stat-number text-cancelled">@Model.CancelledCount</span><span class="stat-label">Cancelled</span></div>
+    </div>
+</div>
+
+<div class="rd-card">
+    <form method="get" asp-action="Index" class="filter-inline">
+        <input type="hidden" name="eventId" value="@ev.EventId" />
+        <label for="categoryId" class="form-label mb-0">Category</label>
+        <select id="categoryId" name="categoryId" class="form-select" onchange="this.form.submit()">
+            <option value="">All categories</option>
+            @foreach (var c in ev.Categories)
+            {
+                <option value="@c.CategoryId" selected="@(Model.CategoryId == c.CategoryId)">@c.CategoryName</option>
+            }
+        </select>
+        <noscript><button type="submit" class="btn btn-sm btn-primary">Filter</button></noscript>
+    </form>
+
+    @if (!Model.Enrolments.Any())
+    {
+        <div class="empty-inline">
+            <i class="bi bi-people"></i>
+            <p>Nobody has enrolled@(Model.CategoryId.HasValue ? " in this category" : "") yet.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table rd-table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Race no.</th>
+                        <th scope="col">Participant</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Enrolled on</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var e in Model.Enrolments)
+                    {
+                        <tr class="@(e.Status == "Cancelled" ? "row-muted" : "")">
+                            <td><span class="race-number">@e.RaceNumber</span></td>
+                            <td>@e.ParticipantName</td>
+                            <td>@e.CategoryName</td>
+                            <td>@Fmt.ShortDate(e.EnrolmentDate)</td>
+                            <td><partial name="_StatusBadge" model="e.Status" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

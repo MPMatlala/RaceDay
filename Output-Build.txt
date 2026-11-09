@@ -1,0 +1,6 @@
+﻿Build started at 12:45 PM...
+1>------ Build started: Project: RaceDay.Web, Configuration: Debug Any CPU ------
+1>Skipping analyzers to speed up the build. You can execute 'Build' or 'Rebuild' command to run analyzers.
+1>RaceDay.Web -> C:\Users\Student\source\repos\RaceDay.3.3\RaceDay.Web\bin\Debug\net8.0\RaceDay.Web.dll
+========== Build: 1 succeeded, 0 failed, 1 up-to-date, 0 skipped ==========
+========== Build completed at 12:45 PM and took 04.152 seconds ==========

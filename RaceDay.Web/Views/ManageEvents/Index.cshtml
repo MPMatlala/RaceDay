@@ -1,0 +1,58 @@
+@model List<EventSummaryDto>
+@{
+    ViewData["Title"] = "Events";
+}
+
+<div class="page-head">
+    <div>
+        <h1>Your events</h1>
+        <p class="page-sub">Create, edit and delete the events you organise.</p>
+    </div>
+    <a class="btn btn-accent" asp-action="Create"><i class="bi bi-plus-lg"></i> New event</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <i class="bi bi-flag"></i>
+        <h2>No events yet</h2>
+        <p>Create your first event to start collecting enrolments.</p>
+        <a class="btn btn-primary" asp-action="Create">Create an event</a>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var ev in Model)
+        {
+            bool past = ev.EventDate.Date < DateTime.Today;
+            <div class="col-md-6 col-xl-4">
+                <article class="rd-card event-card h-100">
+                    <div class="banner">
+                        <partial name="_Banner" model="ev" />
+                        <span class="type-pill"><i class="bi @Fmt.TypeIcon(ev.EventType)"></i> @ev.EventType</span>
+                    </div>
+                    <div class="event-card-body">
+                        <div class="d-flex gap-3">
+                            <partial name="_DateBib" model="ev.EventDate" />
+                            <div>
+                                <h2 class="event-title">@ev.EventName</h2>
+                                <p class="meta mb-1"><i class="bi bi-geo-alt-fill"></i> @ev.Location</p>
+                                <p class="meta mb-0">@Fmt.Distance(ev.Distance) &middot; @ev.CategoryCount @(ev.CategoryCount == 1 ? "category" : "categories") &middot; @ev.TotalEnrolments enrolled @(past ? "· Finished" : "")</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="event-card-actions">
+                        <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@ev.EventId">Edit</a>
+                        <a class="btn btn-sm btn-outline-primary" asp-controller="ManageCategories" asp-action="Index" asp-route-eventId="@ev.EventId">Categories</a>
+                        <a class="btn btn-sm btn-outline-primary" asp-controller="ManageEnrolments" asp-action="Index" asp-route-eventId="@ev.EventId">Enrolments</a>
+                        <a class="btn btn-sm btn-outline-primary" asp-controller="ManageResults" asp-action="Index" asp-route-eventId="@ev.EventId">Results</a>
+                        <form asp-action="Delete" asp-route-id="@ev.EventId" method="post" class="ms-auto" data-confirm="Delete &quot;@ev.EventName&quot;? This cannot be undone.">
+                            <button type="submit" class="btn btn-sm btn-outline-danger" aria-label="Delete @ev.EventName"><i class="bi bi-trash3"></i></button>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}

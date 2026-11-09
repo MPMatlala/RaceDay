@@ -1,0 +1,77 @@
+@model List<ResultDto>
+@{
+    ViewData["Title"] = "My results";
+}
+
+<div class="page-head">
+    <div>
+        <h1>My results</h1>
+        <p class="page-sub">Your race history. Results appear here once the organiser has published them.</p>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <i class="bi bi-trophy"></i>
+        <h2>No results yet</h2>
+        <p>When an organiser publishes the results of an event you entered, your time and position will show up here.</p>
+        <a class="btn btn-primary" asp-controller="MyEnrolments" asp-action="Index">See my enrolments</a>
+    </div>
+}
+else
+{
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="stat-tile stat-tile-sm"><span class="stat-number">@Model.Count</span><span class="stat-label">Races finished</span></div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-tile stat-tile-sm"><span class="stat-number">@Model.Count(r => r.Position.HasValue && r.Position.Value <= 3)</span><span class="stat-label">Podium finishes</span></div>
+        </div>
+    </div>
+
+    <div class="rd-card">
+        <div class="table-responsive">
+            <table class="table rd-table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Event</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Finish time</th>
+                        <th scope="col">Position</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model)
+                    {
+                        <tr>
+                            <td><strong>@r.EventName</strong></td>
+                            <td>@Fmt.ShortDate(r.EventDate)</td>
+                            <td>@r.CategoryName</td>
+                            <td>
+                                <span class="time-value">@Fmt.Time(r.FinishTime)</span>
+                                @if (r.ChipTime.HasValue)
+                                {
+                                    <div class="meta">Chip @Fmt.Time(r.ChipTime)</div>
+                                }
+                            </td>
+                            <td>
+                                @if (r.Position.HasValue)
+                                {
+                                    <span class="position @(r.Position.Value <= 3 ? "position-podium" : "")">
+                                        <strong>@Fmt.Ordinal(r.Position.Value)</strong>@(r.TotalFinishers > 0 ? " out of " + r.TotalFinishers + " finishers" : "")
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="meta">-</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

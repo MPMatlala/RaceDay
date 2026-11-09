@@ -1,0 +1,12 @@
+@* a banner image, or a branded placeholder when the event has none. Model: the event *@
+@model EventDto
+@if (!string.IsNullOrEmpty(Model.BannerUrl))
+{
+    <img src="@Model.BannerUrl" alt="Banner for @Model.EventName" class="banner-img" loading="lazy" />
+}
+else
+{
+    <div class="banner-placeholder" role="img" aria-label="No banner image for @Model.EventName">
+        <i class="bi @Fmt.TypeIcon(Model.EventType)"></i>
+    </div>
+}

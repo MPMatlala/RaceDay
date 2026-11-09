@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Run it. Walk it. Ride it.";
+}
+
+<section class="hero">
+    <div class="hero-lanes" aria-hidden="true"></div>
+    <div class="hero-inner">
+        <h1 class="hero-title">Your next start line is waiting.</h1>
+        <p class="hero-lead">RaceDay is where South Africa's runners, walkers and cyclists find events, claim a race number and see their finishing position. Organisers get everything they need to put on a great day.</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-accent btn-lg" asp-controller="Account" asp-action="Register">Create a free account</a>
+            <a class="btn btn-outline-light btn-lg" asp-controller="Account" asp-action="Login">Log in</a>
+        </div>
+    </div>
+</section>
+
+<section class="row g-4 mt-2">
+    <div class="col-md-6">
+        <div class="rd-card h-100 role-card">
+            <div class="role-icon"><i class="bi bi-person-walking"></i></div>
+            <h2>For participants</h2>
+            <p>Browse upcoming events, filter by date, place or type, and choose your category. Your enrolment is recorded the moment you confirm, and your race history builds up as results come in.</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="rd-card h-100 role-card">
+            <div class="role-icon role-icon-alt"><i class="bi bi-flag-fill"></i></div>
+            <h2>For organisers</h2>
+            <p>Create events with a banner image, set up age and distance categories, watch enrolments come in, and publish finish times and positions once the last runner is home.</p>
+        </div>
+    </div>
+</section>

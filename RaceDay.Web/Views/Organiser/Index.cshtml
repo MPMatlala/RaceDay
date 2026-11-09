@@ -1,0 +1,120 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    int maxEnrolments = Model.Events.Any() ? Math.Max(1, Model.Events.Max(e => e.TotalEnrolments)) : 1;
+    string welcome = string.IsNullOrEmpty(Model.OrganiserName)
+        ? "Welcome back."
+        : "Welcome back, " + Model.OrganiserName.Split(' ')[0] + ".";
+}
+
+<div class="page-head">
+    <div>
+        <h1>Dashboard</h1>
+        <p class="page-sub">@welcome Here is where your events stand.</p>
+    </div>
+    <a class="btn btn-accent" asp-controller="ManageEvents" asp-action="Create"><i class="bi bi-plus-lg"></i> New event</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-4">
+        <div class="stat-tile">
+            <span class="stat-number">@Model.TotalEvents</span>
+            <span class="stat-label">Events created</span>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="stat-tile">
+            <span class="stat-number">@Model.UpcomingCount</span>
+            <span class="stat-label">Coming up</span>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="stat-tile stat-tile-accent">
+            <span class="stat-number">@Model.TotalEnrolments</span>
+            <span class="stat-label">Total enrolments</span>
+        </div>
+    </div>
+</div>
+
+@if (!Model.Events.Any())
+{
+    <div class="empty-state">
+        <i class="bi bi-flag"></i>
+        <h2>No events yet</h2>
+        <p>Create your first event to start collecting enrolments.</p>
+        <a class="btn btn-primary" asp-controller="ManageEvents" asp-action="Create">Create an event</a>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="rd-card">
+                <h2 class="card-title-rd">Enrolments per event</h2>
+                <div class="table-responsive">
+                    <table class="table rd-table align-middle">
+                        <thead>
+                            <tr>
+                                <th scope="col">Event</th>
+                                <th scope="col">Date</th>
+                                <th scope="col" class="w-35">Enrolled</th>
+                                <th scope="col" class="text-end">Manage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ev in Model.Events)
+                            {
+                                bool past = ev.EventDate.Date < DateTime.Today;
+                                <tr>
+                                    <td>
+                                        <strong>@ev.EventName</strong>
+                                        <div class="meta">@ev.Location &middot; @ev.EventType</div>
+                                    </td>
+                                    <td>
+                                        @Fmt.ShortDate(ev.EventDate)
+                                        @if (past) { <span class="tag tag-past">Finished</span> }
+                                    </td>
+                                    <td>
+                                        <div class="enrol-bar" role="img" aria-label="@ev.TotalEnrolments enrolments">
+                                            <span style="width: @((int)(100.0 * ev.TotalEnrolments / maxEnrolments))%"></span>
+                                        </div>
+                                        <small><strong>@ev.TotalEnrolments</strong> in @ev.CategoryCount @(ev.CategoryCount == 1 ? "category" : "categories")</small>
+                                    </td>
+                                    <td class="text-end">
+                                        <a class="btn btn-sm btn-outline-primary" asp-controller="ManageEnrolments" asp-action="Index" asp-route-eventId="@ev.EventId">Enrolments</a>
+                                        <a class="btn btn-sm btn-outline-primary" asp-controller="ManageResults" asp-action="Index" asp-route-eventId="@ev.EventId">Results</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="rd-card">
+                <h2 class="card-title-rd">Upcoming dates</h2>
+                @if (!Model.UpcomingEvents.Any())
+                {
+                    <p class="meta mb-0">Nothing coming up. Time to schedule the next one.</p>
+                }
+                else
+                {
+                    <ul class="upcoming-list">
+                        @foreach (var ev in Model.UpcomingEvents.Take(5))
+                        {
+                            int days = (ev.EventDate.Date - DateTime.Today).Days;
+                            <li>
+                                <partial name="_DateBib" model="ev.EventDate" />
+                                <div>
+                                    <strong>@ev.EventName</strong>
+                                    <div class="meta">@(days == 0 ? "Today" : days == 1 ? "Tomorrow" : "In " + days + " days")</div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+}

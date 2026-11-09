@@ -1,0 +1,89 @@
+@model EventDetailsViewModel
+@{
+    var ev = Model.Event;
+    ViewData["Title"] = ev.EventName;
+    bool hasCategories = ev.Categories.Any();
+    bool canEnrol = ev.Categories.Any(c => !Model.EnrolledCategoryIds.Contains(c.CategoryId));
+}
+
+<nav aria-label="breadcrumb" class="mb-3">
+    <a asp-action="Index" class="back-link"><i class="bi bi-arrow-left"></i> All events</a>
+</nav>
+
+<div class="detail-banner">
+    <partial name="_Banner" model="ev" />
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-lg-7">
+        <div class="d-flex gap-3 align-items-start mb-3">
+            <partial name="_DateBib" model="ev.EventDate" />
+            <div>
+                <h1 class="detail-title">@ev.EventName</h1>
+                <p class="meta mb-0">Organised by @ev.OrganiserName</p>
+            </div>
+        </div>
+
+        <ul class="fact-list">
+            <li><i class="bi bi-calendar-event-fill"></i><span>@Fmt.Date(ev.EventDate)</span></li>
+            <li><i class="bi bi-geo-alt-fill"></i><span>@ev.Location</span></li>
+            <li><i class="bi @Fmt.TypeIcon(ev.EventType)"></i><span>@ev.EventType</span></li>
+            <li><i class="bi bi-signpost-2-fill"></i><span>@Fmt.Distance(ev.Distance)</span></li>
+        </ul>
+
+        <h2 class="section-title">About this event</h2>
+        <p class="description">@(string.IsNullOrWhiteSpace(ev.Description) ? "The organiser has not added a description yet." : ev.Description)</p>
+
+        <div class="weather-box" id="weather" data-weather-url="@Url.Action("Weather", new { id = ev.EventId })">
+            <i class="bi bi-cloud-sun-fill"></i>
+            <span class="weather-text">Checking the weather at @ev.Location ...</span>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="rd-card enrol-card">
+            <h2 class="card-title-rd">Choose your category</h2>
+
+            @if (!hasCategories)
+            {
+                <p class="meta mb-0">The organiser has not added any categories yet, so enrolment is not open. Please check back soon.</p>
+            }
+            else
+            {
+                <form asp-action="Enrol" method="post" id="enrol-form">
+                    <input type="hidden" name="eventId" value="@ev.EventId" />
+
+                    <fieldset>
+                        <legend class="visually-hidden">Categories</legend>
+                        @foreach (var c in ev.Categories)
+                        {
+                            bool already = Model.EnrolledCategoryIds.Contains(c.CategoryId);
+                            string inputId = "category-" + c.CategoryId;
+                            <div class="category-option">
+                                <input type="radio" class="btn-check" name="categoryId" id="@inputId" value="@c.CategoryId" disabled="@already" />
+                                <label class="category-label" for="@inputId">
+                                    <span class="category-name">@c.CategoryName</span>
+                                    <span class="category-meta">@Fmt.Distance(c.DistanceKm) &middot; @c.MaxParticipants places</span>
+                                    @if (c.Route != null)
+                                    {
+                                        <span class="category-meta"><i class="bi bi-sign-turn-right-fill"></i> @c.Route.StartPoint to @c.Route.EndPoint &middot; @c.Route.ElevationGainM m climb</span>
+                                    }
+                                    <span class="category-fee">@(already ? "Enrolled" : Fmt.Money(c.EntryFee))</span>
+                                </label>
+                            </div>
+                        }
+                    </fieldset>
+
+                    @if (canEnrol)
+                    {
+                        <button type="submit" class="btn btn-accent w-100 mt-3" id="enrol-button" disabled>Select a category to enrol</button>
+                    }
+                    else
+                    {
+                        <p class="meta mt-3 mb-0"><i class="bi bi-check-circle-fill text-confirmed"></i> You are enrolled in every category of this event. See <a asp-controller="MyEnrolments" asp-action="Index">My enrolments</a>.</p>
+                    }
+                </form>
+            }
+        </div>
+    </div>
+</div>

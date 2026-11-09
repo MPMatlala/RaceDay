@@ -1,0 +1,40 @@
+@model EventPickerViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="page-head">
+    <div>
+        <h1>@Model.Title</h1>
+        <p class="page-sub">@Model.Intro</p>
+    </div>
+</div>
+
+@if (!Model.Events.Any())
+{
+    <div class="empty-state">
+        <i class="bi bi-flag"></i>
+        <h2>No events yet</h2>
+        <p>Create your first event and it will appear here.</p>
+        <a class="btn btn-primary" asp-controller="ManageEvents" asp-action="Create">Create an event</a>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var ev in Model.Events)
+        {
+            <div class="col-md-6 col-xl-4">
+                <div class="rd-card picker-card h-100">
+                    <partial name="_DateBib" model="ev.EventDate" />
+                    <div class="flex-grow-1">
+                        <h2 class="picker-title">@ev.EventName</h2>
+                        <p class="meta"><i class="bi bi-geo-alt-fill"></i> @ev.Location</p>
+                        <p class="meta"><i class="bi @Fmt.TypeIcon(ev.EventType)"></i> @ev.EventType &middot; @Fmt.Distance(ev.Distance) &middot; @ev.TotalEnrolments enrolled</p>
+                        <a class="btn btn-primary btn-sm" asp-controller="@Model.Controller" asp-action="@Model.Action" asp-route-eventId="@ev.EventId">@Model.ButtonText</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

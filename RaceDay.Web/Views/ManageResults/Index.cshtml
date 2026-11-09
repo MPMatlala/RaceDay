@@ -1,0 +1,77 @@
+@model ResultsPageViewModel
+@{
+    ViewData["Title"] = "Results";
+    var ev = Model.Event;
+}
+
+<div class="page-head">
+    <div>
+        <h1>Results</h1>
+        <p class="page-sub">@ev.EventName &middot; @Fmt.Date(ev.EventDate)</p>
+    </div>
+    <a class="btn btn-outline-primary" asp-controller="ManageResults" asp-action="Index">Choose another event</a>
+</div>
+
+@if (!Model.EventHasHappened)
+{
+    <div class="alert alert-warning" role="alert">
+        <i class="bi bi-hourglass-split"></i> This event has not taken place yet. You can still enter results, but they are normally captured after the event concludes.
+    </div>
+}
+
+<div class="rd-card">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+        <h2 class="card-title-rd mb-0">Finish times and positions</h2>
+        <span class="meta">@Model.CapturedCount of @Model.Rows.Count captured</span>
+    </div>
+    <p class="meta">Type the time as <strong>h:mm:ss</strong> (for example 1:52:30). Saving a row publishes it straight to the participant's My Results page.</p>
+
+    @if (!Model.Rows.Any())
+    {
+        <div class="empty-inline">
+            <i class="bi bi-people"></i>
+            <p>There are no enrolled participants to capture results for.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table rd-table results-table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Participant</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Finish time</th>
+                        <th scope="col">Chip time <small>(optional)</small></th>
+                        <th scope="col">Position</th>
+                        <th scope="col"><span class="visually-hidden">Save</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model.Rows)
+                    {
+                        string formId = "result-" + row.EnrolmentId;
+                        <tr>
+                            <td>
+                                <strong>@row.ParticipantName</strong>
+                                <div class="meta"><span class="race-number">@row.RaceNumber</span> <partial name="_StatusBadge" model="row.Status" /></div>
+                            </td>
+                            <td>@row.CategoryName</td>
+                            <td><input form="@formId" name="finishTime" value="@row.FinishTime" class="form-control form-control-sm time-input" placeholder="1:52:30" inputmode="numeric" aria-label="Finish time for @row.ParticipantName" required /></td>
+                            <td><input form="@formId" name="chipTime" value="@row.ChipTime" class="form-control form-control-sm time-input" placeholder="1:52:28" inputmode="numeric" aria-label="Chip time for @row.ParticipantName" /></td>
+                            <td><input form="@formId" name="position" value="@row.Position" type="number" min="1" step="1" class="form-control form-control-sm position-input" aria-label="Position for @row.ParticipantName" required /></td>
+                            <td class="text-end text-nowrap">
+                                <form id="@formId" asp-action="Save" method="post">
+                                    <input type="hidden" name="eventId" value="@ev.EventId" />
+                                    <input type="hidden" name="enrolmentId" value="@row.EnrolmentId" />
+                                    <input type="hidden" name="resultId" value="@row.ResultId" />
+                                    <button type="submit" class="btn btn-sm @(row.HasResult ? "btn-outline-primary" : "btn-primary")">@(row.HasResult ? "Update" : "Save & publish")</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

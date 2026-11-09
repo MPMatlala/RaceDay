@@ -1,0 +1,8 @@
+bin/
+obj/
+.vs/
+*.user
+
+# secrets must never be committed
+appsettings.Local.json
+*.env

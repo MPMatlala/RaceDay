@@ -1,0 +1,64 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Sign up";
+}
+
+<div class="auth-wrap">
+    <div class="rd-card auth-card auth-card-wide">
+        <h1>Join RaceDay</h1>
+        <p class="page-sub">It takes a minute.</p>
+
+        <form asp-action="Register" method="post" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <fieldset class="mb-3">
+                <legend class="form-label">I am signing up as</legend>
+                <div class="role-choice">
+                    <input type="radio" class="btn-check" name="Role" id="role-participant" value="Participant" checked="@(Model.Role == "Participant")" />
+                    <label class="role-option" for="role-participant"><i class="bi bi-person-walking"></i> A participant<small>I want to enter events</small></label>
+
+                    <input type="radio" class="btn-check" name="Role" id="role-organiser" value="Organiser" checked="@(Model.Role == "Organiser")" />
+                    <label class="role-option" for="role-organiser"><i class="bi bi-flag-fill"></i> An organiser<small>I put events on</small></label>
+                </div>
+                <span asp-validation-for="Role" class="field-error"></span>
+            </fieldset>
+
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" autocomplete="name" />
+                <span asp-validation-for="FullName" class="field-error"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control" autocomplete="email" />
+                    <span asp-validation-for="Email" class="field-error"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="PhoneNumber" class="form-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" autocomplete="tel" />
+                    <span asp-validation-for="PhoneNumber" class="field-error"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input asp-for="Password" class="form-control" autocomplete="new-password" />
+                    <span asp-validation-for="Password" class="field-error"></span>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label asp-for="ConfirmPassword" class="form-label"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" />
+                    <span asp-validation-for="ConfirmPassword" class="field-error"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Create my account</button>
+        </form>
+
+        <p class="auth-alt">Already have an account? <a asp-action="Login">Log in</a></p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

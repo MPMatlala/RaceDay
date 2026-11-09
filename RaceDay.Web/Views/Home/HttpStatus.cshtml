@@ -1,0 +1,23 @@
+@{
+    int code = ViewData["Code"] is int c ? c : 404;
+    ViewData["Title"] = code == 404 ? "Page not found" : "Something went wrong";
+}
+<div class="empty-state">
+    <i class="bi bi-signpost-split-fill"></i>
+    @if (code == 404)
+    {
+        <h1>Wrong turn</h1>
+        <p>We could not find that page. It may have moved, or the link may be wrong.</p>
+    }
+    else if (code == 400)
+    {
+        <h1>That did not go through</h1>
+        <p>Your request could not be completed. Please go back, refresh the page and try again.</p>
+    }
+    else
+    {
+        <h1>We hit an obstacle</h1>
+        <p>Something went wrong. Please try again.</p>
+    }
+    <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Back to the start line</a>
+</div>
