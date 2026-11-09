@@ -3,9 +3,9 @@ using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace RaceDay.Tests
-{
+{//start of namespace
     public class AuthTests : ApiTestBase
-    {
+    {//start of class
         public AuthTests(RaceDayFactory factory) : base(factory)
         {
         }
