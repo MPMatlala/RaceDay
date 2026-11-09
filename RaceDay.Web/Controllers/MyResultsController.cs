@@ -4,11 +4,11 @@ using RaceDay.Web.Models.Api;
 using RaceDay.Web.Services;
 
 namespace RaceDay.Web.Controllers
-{
+{//start of MyResultsController
     // a Participant's race history
     [SessionAuthorize("Participant")]
     public class MyResultsController : BaseController
-    {
+    {//start of MyResultsController constructor
         public MyResultsController(IApiClient api) : base(api)
         {
         }

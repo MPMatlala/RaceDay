@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // MVC - every POST is protected against forgery and no page is cached, so the Back button
 // cannot show a protected page after logging out
 builder.Services.AddControllersWithViews(options =>
-{
+{// the API returns JSON error responses instead of a stack trace
     options.Filters.Add<ApiExceptionFilter>();
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
     options.Filters.Add(new ResponseCacheAttribute { NoStore = true, Location = ResponseCacheLocation.None });
