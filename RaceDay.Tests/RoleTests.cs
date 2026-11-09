@@ -1,11 +1,12 @@
+using Microsoft.AspNetCore.Hosting;
 using System.Net;
 using System.Net.Http.Json;
 
 namespace RaceDay.Tests
-{
+{//start of namespace
     // checks that Organisers and Participants cannot use each other's endpoints
     public class RoleTests : ApiTestBase
-    {
+    {//start of class
         public RoleTests(RaceDayFactory factory) : base(factory)
         {
         }
