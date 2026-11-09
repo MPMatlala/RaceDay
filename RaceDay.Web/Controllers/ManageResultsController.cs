@@ -7,11 +7,11 @@ using RaceDay.Web.Models.ViewModels;
 using RaceDay.Web.Services;
 
 namespace RaceDay.Web.Controllers
-{
+{//start of namespace
     // capture and publish finish times and positions once an event is over
     [SessionAuthorize("Organiser")]
     public class ManageResultsController : BaseController
-    {
+    {//start of ManageResultsController
         public ManageResultsController(IApiClient api) : base(api)
         {
         }
