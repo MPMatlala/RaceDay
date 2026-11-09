@@ -7,10 +7,10 @@ using RaceDay.Api.Data;
 using RaceDay.Api.Services;
 
 namespace RaceDay.Tests
-{
+{//start of namespace
     // starts the real API for the tests, but uses an in-memory database instead of SQL Server
     public class RaceDayFactory : WebApplicationFactory<Program>
-    {
+    {//start of class
         private readonly string _dbName = Guid.NewGuid().ToString();
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
