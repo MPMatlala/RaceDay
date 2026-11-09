@@ -2,9 +2,9 @@ using System.Net;
 using System.Net.Http.Json;
 
 namespace RaceDay.Tests
-{
+{//start of namespace
     public class EventTests : ApiTestBase
-    {
+    {//start of class
         public EventTests(RaceDayFactory factory) : base(factory)
         {
         }
@@ -25,7 +25,7 @@ namespace RaceDay.Tests
             });
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        }
+        }//end of test
 
         [Fact]
         public async Task CreateEvent_WithoutEventName_Returns400()
@@ -42,7 +42,7 @@ namespace RaceDay.Tests
             });
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        }
+        }//end of test
 
         [Fact]
         public async Task CreateEvent_WithInvalidEventType_Returns400()
