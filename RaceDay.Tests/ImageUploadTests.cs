@@ -4,10 +4,10 @@ using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace RaceDay.Tests
-{
+{//start of namespace
     // banner and profile picture uploads (Azure Blob Storage is replaced by a fake in these tests)
     public class ImageUploadTests : ApiTestBase
-    {
+    {//start of class
         public ImageUploadTests(RaceDayFactory factory) : base(factory)
         {
         }
