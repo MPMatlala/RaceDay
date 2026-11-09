@@ -3,10 +3,10 @@ using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace RaceDay.Tests
-{
+{//start of namespace
     // the endpoints the MVC dashboard and "My Results" page depend on
     public class OrganiserDashboardTests : ApiTestBase
-    {
+    {//start of class
         public OrganiserDashboardTests(RaceDayFactory factory) : base(factory)
         {
         }
