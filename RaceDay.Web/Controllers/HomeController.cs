@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using RaceDay.Web.Helpers;
 
 namespace RaceDay.Web.Controllers
-{
+{// start of HomeController
     public class HomeController : Controller
-    {
+    {// start of HomeController constructor
         // the public landing page. People who are already logged in go straight to their own home page.
         public IActionResult Index()
         {
