@@ -129,7 +129,7 @@ namespace RaceDay.Web.Models.Api
     }
 
     public class PictureUploadResponse
-    {
+    {//start of class
         public string ProfilePictureUrl { get; set; }
-    }
+    }//end of class
 }//end of the namespace
