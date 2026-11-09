@@ -4,7 +4,7 @@ namespace RaceDay.Web.Models.Api
     // no business rules live in this project.
 
     public class LoginResponse
-    {
+    {//start of class
         public string Message { get; set; }
         public string Token { get; set; }
         public int Id { get; set; }

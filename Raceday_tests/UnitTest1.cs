@@ -7,5 +7,6 @@ namespace Raceday_tests
         {
 
         }
-    }
+    }//end class
 }
+//end
