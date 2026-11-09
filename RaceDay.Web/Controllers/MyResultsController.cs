@@ -26,6 +26,6 @@ namespace RaceDay.Web.Controllers
                 .ToList();
 
             return View(results);
-        }
-    }
-}
+        }//end of MyResultsController constructor
+    }//end of MyResultsController
+}//end of namespace
