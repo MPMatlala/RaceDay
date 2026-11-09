@@ -6,11 +6,11 @@ using RaceDay.Web.Models.ViewModels;
 using RaceDay.Web.Services;
 
 namespace RaceDay.Web.Controllers
-{
+{//start of namespace
     // see everyone who has enrolled for an event
     [SessionAuthorize("Organiser")]
     public class ManageEnrolmentsController : BaseController
-    {
+    {//start of ManageEnrolmentsController
         public ManageEnrolmentsController(IApiClient api) : base(api)
         {
         }
