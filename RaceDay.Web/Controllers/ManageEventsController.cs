@@ -6,11 +6,11 @@ using RaceDay.Web.Models.ViewModels;
 using RaceDay.Web.Services;
 
 namespace RaceDay.Web.Controllers
-{
+{//start of ManageEventsController
     // create, edit and delete events (including the banner image)
     [SessionAuthorize("Organiser")]
     public class ManageEventsController : BaseController
-    {
+    {//start of ManageEventsController constructor
         public ManageEventsController(IApiClient api) : base(api)
         {
         }
