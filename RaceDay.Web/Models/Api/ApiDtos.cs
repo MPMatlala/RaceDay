@@ -132,4 +132,4 @@ namespace RaceDay.Web.Models.Api
     {
         public string ProfilePictureUrl { get; set; }
     }
-}
+}//end of the namespace
